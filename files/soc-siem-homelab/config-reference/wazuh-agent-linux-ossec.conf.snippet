@@ -1,0 +1,11 @@
+<!--
+  Add this block inside <ossec_config> in the Linux endpoint's agent config:
+    /var/ossec/etc/ossec.conf
+  Then restart the agent:
+    sudo systemctl restart wazuh-agent
+  It tells the agent to forward the CustomApp log file to the manager.
+-->
+<localfile>
+  <location>/var/log/customapp.log</location>
+  <log_format>syslog</log_format>
+</localfile>

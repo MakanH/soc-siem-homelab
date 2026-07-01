@@ -1,0 +1,18 @@
+<!--
+  Add these blocks inside <ossec_config> in the Windows agent config:
+    C:\Program Files (x86)\ossec-agent\ossec.conf
+  Then restart the agent (PowerShell, as admin):
+    Restart-Service WazuhSvc
+
+  First block forwards Sysmon telemetry (process creation, network, etc.).
+  Second block forwards the CustomApp log if you run the generator on Windows.
+-->
+<localfile>
+  <location>Microsoft-Windows-Sysmon/Operational</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+
+<localfile>
+  <location>C:\logs\customapp.log</location>
+  <log_format>syslog</log_format>
+</localfile>

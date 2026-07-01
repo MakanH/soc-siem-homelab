@@ -1,0 +1,59 @@
+<!--
+  Custom correlation rules for the SIEM home lab "CustomApp" log source.
+
+  Deploy to:  /var/ossec/etc/rules/local_rules.xml   (on the Wazuh manager)
+  Validate :  sudo /var/ossec/bin/wazuh-logtest   (paste a sample line, watch the rule id/level)
+  Reload   :  sudo systemctl restart wazuh-manager
+
+  Detection ladder:
+    100100  (level 3 ) base CustomApp event
+    100101  (level 5 ) a single failed login                              [T1110]
+    100102  (level 10) 5+ failures from the same srcip in 120s = brute force [T1110]
+    100103  (level 12) a success from that srcip shortly after = compromise  [T1110]
+
+  Note: field comparisons use type="pcre2" so Wazuh evaluates the decoder-extracted
+  dynamic fields (action/user/srcip/reason) rather than treating them as static.
+-->
+
+<group name="customapp,authentication,">
+
+  <rule id="100100" level="3">
+    <decoded_as>customapp</decoded_as>
+    <description>CustomApp event logged.</description>
+  </rule>
+
+  <rule id="100101" level="5">
+    <if_sid>100100</if_sid>
+    <field name="app_action">LOGIN_FAILED</field>
+    <description>CustomApp: failed login for user $(user) from $(srcip).</description>
+    <group>authentication_failed,</group>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- Correlation: 5+ failures from the SAME source ip within 120 seconds. -->
+  <rule id="100102" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>100101</if_matched_sid>
+    <same_field>srcip</same_field>
+    <description>CustomApp: possible brute force - 5+ failed logins from $(srcip) in 120s.</description>
+    <group>authentication_failures,brute_force,</group>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- A successful login from that same source shortly after the burst = likely compromise. -->
+  <rule id="100103" level="12" timeframe="300">
+    <if_sid>100100</if_sid>
+    <field name="app_action">LOGIN_SUCCESS</field>
+    <if_matched_sid>100102</if_matched_sid>
+    <same_field>srcip</same_field>
+    <description>CustomApp: successful login from $(srcip) following a brute-force burst - possible account compromise.</description>
+    <group>authentication_success,account_compromise,</group>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+</group>

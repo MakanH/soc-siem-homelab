@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SiemLab.LogGenerator</RootNamespace>
+    <AssemblyName>log-generator</AssemblyName>
+  </PropertyGroup>
+
+</Project>

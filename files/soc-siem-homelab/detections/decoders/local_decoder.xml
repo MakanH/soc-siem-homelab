@@ -1,0 +1,23 @@
+<!--
+  Custom decoder for the SIEM home lab "CustomApp" authentication log.
+
+  Deploy to:  /var/ossec/etc/decoders/local_decoder.xml   (on the Wazuh manager)
+  Validate :  sudo /var/ossec/bin/wazuh-logtest
+  Reload   :  sudo systemctl restart wazuh-manager
+
+  Sample line this parses (emitted by log-generator/Program.cs):
+    Jun 07 14:03:11 APPSRV CustomApp: action=LOGIN_FAILED user=jdoe srcip=10.10.10.20 reason=bad_password
+
+  Note: the extracted "action" value is stored in the field 'app_action' because
+  'action' is a reserved static field name in Wazuh and cannot be matched in rules.
+-->
+
+<decoder name="customapp">
+  <program_name>^CustomApp$</program_name>
+</decoder>
+
+<decoder name="customapp-fields">
+  <parent>customapp</parent>
+  <regex>action=(\S+) user=(\S+) srcip=(\S+) reason=(\S+)</regex>
+  <order>app_action, user, srcip, reason</order>
+</decoder>

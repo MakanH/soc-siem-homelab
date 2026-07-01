@@ -1,0 +1,26 @@
+# .NET build output
+[Bb]in/
+[Oo]bj/
+*.user
+
+# Offline build helper (do not commit)
+**/nuget.config
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Never commit secrets / live credentials
+wazuh-install-files.tar
+*-passwords.txt
+*.pem
+*.key
+secrets.*
+
+# Personal planning / drafts — keep local, never publish
+COMMIT-PLAN.md
+README-final.md
+*-draft.md
+
+# VM disk images — far too large for git
+VirtualBox-VMs/
