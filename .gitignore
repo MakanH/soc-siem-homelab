@@ -16,3 +16,11 @@ wazuh-install-files.tar
 *.pem
 *.key
 secrets.*
+
+# Personal planning / drafts — keep local, never publish
+COMMIT-PLAN.md
+README-final.md
+*-draft.md
+
+# VM disk images — far too large for git
+VirtualBox-VMs/

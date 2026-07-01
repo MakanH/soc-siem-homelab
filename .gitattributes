@@ -1,0 +1,9 @@
+# Tell GitHub Linguist how to classify files correctly.
+
+# Wazuh agent/network config snippets are config, not code — keep them out of stats.
+config-reference/* linguist-documentation
+
+# The decoder and correlation rules ARE the detection-engineering work.
+# Force them to count as XML in the language bar (detectable, not vendored/data-only).
+detections/decoders/local_decoder.xml linguist-language=XML linguist-detectable=true
+detections/rules/local_rules.xml linguist-language=XML linguist-detectable=true
