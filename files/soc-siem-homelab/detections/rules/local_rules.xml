@@ -35,7 +35,7 @@
   <!-- Correlation: 5+ failures from the SAME source ip within 120 seconds. -->
   <rule id="100102" level="10" frequency="5" timeframe="120">
     <if_matched_sid>100101</if_matched_sid>
-    <same_field>srcip</same_field>
+    <same_srcip />
     <description>CustomApp: possible brute force - 5+ failed logins from $(srcip) in 120s.</description>
     <group>authentication_failures,brute_force,</group>
     <mitre>
@@ -48,7 +48,7 @@
     <if_sid>100100</if_sid>
     <field name="app_action">LOGIN_SUCCESS</field>
     <if_matched_sid>100102</if_matched_sid>
-    <same_field>srcip</same_field>
+    <same_srcip />
     <description>CustomApp: successful login from $(srcip) following a brute-force burst - possible account compromise.</description>
     <group>authentication_success,account_compromise,</group>
     <mitre>
